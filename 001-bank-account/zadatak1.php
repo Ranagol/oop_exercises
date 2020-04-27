@@ -66,7 +66,7 @@ class BankAccount {
   }
     
 }
-//problem: nema blokiranja
+
 
 class User {
   private $ime;
