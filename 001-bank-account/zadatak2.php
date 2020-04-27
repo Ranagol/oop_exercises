@@ -15,13 +15,24 @@ abstract class BankAccount {
     return $this->dozvoljeniMinus;
   }
 
+  public function getProvizija(){
+    return $this->provizija;
+  }
+
+  public function oduzmiProviziju($amount){
+    $vrednostProvizije = $amount - ($amount * ((100 - $this->getProvizija())/100));
+    $this->stanje -= $vrednostProvizije;
+    echo 'Skinuli smo proviziju u vrednosti od ' . $vrednostProvizije . ' i zato vase stanje je ' . $this->getStanje() . '<br>';
+  }
+
   //UPLATE
   public function povecajStanje($amount){
     $this->stanje += $amount;
     echo 'Uplatili ste ' . $amount . ' i vase stanje je trenutno ' . $this->getStanje() . '<br>';
-    //OK, TU JE GRESKA ISPOD
-
-    if ($this->proveriBlokiranost()  && $this->getStanje() > $this->getdozvoljeniMinus()) {
+    //nakon uplate, skini proviziju
+    $this->oduzmiProviziju($amount);
+    //ako je klijent bio blokiran zbog nedostatka para, a sada nakon uplate ima dovoljno para, onda odblokiraj
+    if ($this->proveriBlokiranost() && $this->getStanje() > $this->getdozvoljeniMinus()) {
       $this->odBlokirajRacun();
     }
   }
@@ -33,11 +44,14 @@ abstract class BankAccount {
       return;//ako je blokiran, ovde prestaje sve.
     }
     echo 'Cool, klijent nije blokiran. '. '<br>';
-    if ($this->daLiImaDovoljnoPara($amount)) {//ako ima dovoljno para, onda...
+    if ($this->daLiImaDovoljnoPara($amount)) {//ako ima dovoljno para, onda isplati pare klijentu
       $this->stanje -= $amount;
       echo 'Isplaceno vam je ' . $amount . ' i vase stanje je trenutno ' . $this->getStanje() . '<br>';
     }
-    if ($this->getStanje() == $this->getdozvoljeniMinus()) {//provera da li je otisao u -200, jer ako da, onda se blokira
+    //nakon isplate, skini proviziju
+    $this->oduzmiProviziju($amount);
+    //Proveri da li treba blokirati nakon isplate
+    if ($this->getStanje() == $this->getdozvoljeniMinus()) {
       $this->blokirajRacun();
     }
   }
@@ -71,18 +85,15 @@ abstract class BankAccount {
 }
 
 class SimpleBankAccount extends BankAccount {
-  //ovde nema nista, jer ovo je u principu u dalje BankAccount...
-  
+  //ovde nema nista, jer ovo je u principu u dalje BankAccount... Ovde ne treba menjati nista.
 }
 
 
 class SecuredBankAccount extends BankAccount{//e, ovde cemo morati da overridujemo...
   protected $dozvoljeniMinus = -1000;
   protected $provizija = 2.5;
-
 }
 
-//1-build in the provizija shit
 
 
 class User {
@@ -120,8 +131,8 @@ class User {
 $user = new User('Marko', 'Markovic');
 var_dump($user);
 $user->uplata(100, 'simple');
-$user->uplata(200, 'secured');
 $user->isplata(50, 'simple');
+$user->uplata(200, 'secured');
 $user->isplata(100, 'secured');
 var_dump($user);
 
