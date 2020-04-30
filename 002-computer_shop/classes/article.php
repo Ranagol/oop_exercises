@@ -11,7 +11,23 @@ abstract class Article {
     $this->stanje = $stanje;
   }
 
+  public function getStanje(){
+    return $this->stanje;
+  }
+
   public function getName(){
     return $this->name;
+  }
+
+  public function smanjiStanje(){
+    $this->stanje = $this->getStanje() - 1;
+  }
+
+  public function povecajStanje(){
+    $this->stanje = $this->getStanje() + 1;
+  }
+
+  public function getCena(){
+    return $this->cena;
   }
 }
