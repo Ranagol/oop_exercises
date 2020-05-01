@@ -10,7 +10,8 @@ $johnDoe = new User('John Doe');
 $janeDoe = new User('Jane Doe');
 $hotel->subscribe($johnDoe, 3);
 $hotel->subscribe($janeDoe, 3);
-
+$hotel->subscribe($johnDoe, 2);
+$hotel->subscribe($janeDoe, 2);
 
 $hotel->napraviSobu(1, 1, true, true);
 $hotel->napraviSobu(2, 2,  true, true);
@@ -24,4 +25,7 @@ $hotel->pronadjiSlobodnuSobu(2);
 $hotel->iznajmiSobu(3);//...sa tri kreveta
 $hotel->iznajmiSobu(3);//...sa tri kreveta
 $hotel->odjaviSobu(6);//ovde smo odjavili gosta iz sobe 6
+$hotel->iznajmiSobu(2);
+$hotel->iznajmiSobu(2);
+$hotel->odjaviSobu(5);
 var_dump($hotel);

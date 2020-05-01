@@ -4,9 +4,9 @@ class Hotel {
   private static $instance;
   protected $description = 'Hotel';
   private $listaSoba = [];
-  protected $simplBedSubscribers = [];
+  protected $simpleBedSubscribers = [];
   protected $doubleBedSubscribers = [];
-  protected $tripleBedSubsribers = [];
+  protected $tripleBedSubscribers = [];
 
 
   private function __construct(){}
@@ -86,13 +86,24 @@ class Hotel {
         $brojKreveta = $room->getBrojKreveta();
       }
     }
-    //proveravamo da li treba da obavestimo odredjene subsrcibere za dati tip sobe
+    //proveravamo da li treba da obavestimo odredjene subsrcibere za dati tip sobe. Da li ima subscribera za dati broj kreveta? Ako da, obavesti ih.
+    $this->areThereSubscribers($brojKreveta);
 
   }
 
-  public function shouldWeNotify($brojKreveta){
-    //do we have subscribers for this type of room?
-    
+  public function areThereSubscribers($brojKreveta){
+    //do we have subscribers for this type of room? If so, notify them.
+    if ($brojKreveta == 1 && !empty($this->simpleBedSubscribers)) {
+      $this->notify($this->simpleBedSubscribers, $brojKreveta);
+
+    } elseif ($brojKreveta == 2 && !empty($this->doubleBedSubscribers)) {
+      $this->notify($this->doubleBedSubscribers, $brojKreveta);
+
+    } elseif ($brojKreveta == 3 && !empty($this->tripleBedSubscribers)) {
+      $this->notify($this->tripleBedSubscribers, $brojKreveta);
+    } else {
+      echo '<br>Something is wrong with the areThereSubscribers.<br>';
+    }
   }
 
   //the notify action could happen only if the guest has sign out of the room. So we have to create an odjava function, and only after that we can work with the Observer task.
@@ -102,7 +113,14 @@ class Hotel {
     } elseif ($brojKreveta == 2) {
       $this->doubleBedSubscribers[] = $user;
     } elseif ($brojKreveta == 3) {
-      $this->tripleBedSubsribers[] = $user;
+      $this->tripleBedSubscribers[] = $user;
+    }
+  }
+
+  public function notify($subscriberGroup, $brojKreveta){
+    echo '<br>Notifying has been triggered!***************************<br>';
+    foreach ($subscriberGroup as $observer) {
+      $observer->whenThereIsAFreeRoom($brojKreveta);
     }
   }
 
