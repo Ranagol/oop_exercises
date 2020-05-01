@@ -24,7 +24,7 @@ class Hotel {
       echo 'Broj sobe: ' . $room->getName() . '<br>';
       echo 'Broj kreveta: ' . $room->getBrojKreveta() . '<br>';
       echo 'Da li je izdata soba: ' ; 
-      $room->getDaLiJeIzdato();
+      echo (($room->getDaLiJeIzdato()) ? 'soba je izdata' : 'soba je slobodna');
       echo '<br>***<br>';
     }
   }
@@ -47,4 +47,29 @@ class Hotel {
     echo 'Broj slobodnih dvokrevetnih soba: ' . $brojSlobodnihDvoKrevetnihSoba . '<br>';
     echo 'Broj slobodnih trokrevetnih soba: ' . $brojSlobodnihTroKrevetnihSoba . '<br>';
   }
+
+  public function pronadjiSlobodnuSobu($brojKreveta){
+    foreach ($this->listaSoba as $room) {
+      if ($room->getDaLiJeIzdato() == false && $room->getBrojKreveta() == $brojKreveta) {
+        echo 'Pronasli smo slobodnu sobu! Broj sobe je: ' . $room->getName() . '<br>';
+        return $room->getName();
+        break;
+      } 
+    }
+    echo 'Nazalost nemamo slobodne sobe sa ' . $brojKreveta . ' kreveta.<br>';
+    return false;
+  }
+
+  public function iznajmiSobu($brojKreveta){
+    $brojSlobodneSobe = $this->pronadjiSlobodnuSobu($brojKreveta);
+    //ako nema slobodne sobe sa datim brojem kreveta
+    if (!$brojSlobodneSobe) {
+      echo 'Postovani klijentu, nemamo slobodnu sobu sa ' . $brojKreveta . 'brojem kreveta, trenutno.<br>';
+    }
+    //ako ima slobodne sobe sa datim brojem kreveta
+
+  }
+
+
+
 }

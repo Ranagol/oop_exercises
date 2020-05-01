@@ -14,4 +14,5 @@ $hotel->napraviSobu(5, 2,  true, true);
 $hotel->napraviSobu(6, 3, true, true);
 $hotel->pokaziSlobodneSobe();
 $hotel->pokaziSveSobe();
+$hotel->pronadjiSlobodnuSobu(3);
 var_dump($hotel);
