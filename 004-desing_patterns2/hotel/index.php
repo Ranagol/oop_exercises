@@ -4,11 +4,14 @@ spl_autoload_register('myAutoloader');
 function myAutoloader($className){
   include 'classes/' . $className . '.php';
 }
+$hotel = Hotel::getInstance();
 
 $johnDoe = new User('John Doe');
 $janeDoe = new User('Jane Doe');
+$hotel->subscribe($johnDoe, 3);
+$hotel->subscribe($janeDoe, 3);
 
-$hotel = Hotel::getInstance();
+
 $hotel->napraviSobu(1, 1, true, true);
 $hotel->napraviSobu(2, 2,  true, true);
 $hotel->napraviSobu(3, 3, true, true);
@@ -17,7 +20,8 @@ $hotel->napraviSobu(5, 2,  true, true);
 $hotel->napraviSobu(6, 3, true, true);
 $hotel->pokaziSlobodneSobe();
 $hotel->pokaziSveSobe();
-$hotel->pronadjiSlobodnuSobu(3);
-$hotel->iznajmiSobu(3);//sobe 3 i 6 su jedine trokrevetne sobe
-$hotel->iznajmiSobu(6);//sobe 3 i 6 su jedine trokrevetne sobe
+$hotel->pronadjiSlobodnuSobu(2);
+$hotel->iznajmiSobu(3);//...sa tri kreveta
+$hotel->iznajmiSobu(3);//...sa tri kreveta
+$hotel->odjaviSobu(6);//ovde smo odjavili gosta iz sobe 6
 var_dump($hotel);

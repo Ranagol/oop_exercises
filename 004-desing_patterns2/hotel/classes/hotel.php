@@ -4,6 +4,10 @@ class Hotel {
   private static $instance;
   protected $description = 'Hotel';
   private $listaSoba = [];
+  protected $simplBedSubscribers = [];
+  protected $doubleBedSubscribers = [];
+  protected $tripleBedSubsribers = [];
+
 
   private function __construct(){}
 
@@ -64,12 +68,42 @@ class Hotel {
     $slobodnaSoba = $this->pronadjiSlobodnuSobu($brojKreveta);
     //ako nema slobodne sobe sa datim brojem kreveta
     if (!$slobodnaSoba) {
-      echo 'Postovani klijentu, nemamo slobodnu sobu sa ' . $brojKreveta . 'brojem kreveta, trenutno.<br>';
+      echo 'Postovani klijentu, nemamo slobodnu sobu sa ' . $brojKreveta . ' brojem kreveta, trenutno.<br>';
     }
     //ako ima slobodne sobe sa datim brojem kreveta
+    var_dump($slobodnaSoba);
     $slobodnaSoba->setdaLiJeIzdato(true);//namestamo sobu da je izdata
     echo 'Dragi klijentu, soba broj ' . $slobodnaSoba->getName() . ' je iznajmljena za vas. <br>';
+  }
 
+  public function odjaviSobu($brojSobe){
+    //vrsimo odjavu sobe
+    $brojKreveta = null;
+    foreach ($this->listaSoba as $room) {
+      if ($room->getName() == $brojSobe) {
+        $room->setDaLiJeIzdato(false);
+        echo 'Soba ' . $brojSobe . ' je odjavljena!';
+        $brojKreveta = $room->getBrojKreveta();
+      }
+    }
+    //proveravamo da li treba da obavestimo odredjene subsrcibere za dati tip sobe
+
+  }
+
+  public function shouldWeNotify($brojKreveta){
+    //do we have subscribers for this type of room?
+    
+  }
+
+  //the notify action could happen only if the guest has sign out of the room. So we have to create an odjava function, and only after that we can work with the Observer task.
+  public function subscribe($user, $brojKreveta){
+    if ($brojKreveta == 1) {
+      $this->simpleBedSubscribers[] = $user;
+    } elseif ($brojKreveta == 2) {
+      $this->doubleBedSubscribers[] = $user;
+    } elseif ($brojKreveta == 3) {
+      $this->tripleBedSubsribers[] = $user;
+    }
   }
 
 

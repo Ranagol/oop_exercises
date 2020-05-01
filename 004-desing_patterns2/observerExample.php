@@ -5,9 +5,10 @@
 
 /* OBSERVER PATTERN IN MY WORDS
 1. We need two interfaces: Observer and Observable
-2. There will be an Observer class (here: JobSeeker, that are observing the new job ads) and an Observable class (here: EmploymentAgency, that is creating new job ads)
-3. All the observer object has to be collected in the Observable/EmploymentAgency class, in an array
+2. There will be an Observer class (here: JobSeeker, that are observing the new job ads) and an Observable class (here: EmploymentAgency, that is creating new job ads).
+3. All the observer objects have to be collected in the Observable/EmploymentAgency class, in an array
 4. Use foreach on this array, and for every object trigger their REACTION, via polymorphism
+5. The Observable class must have a protected notify function, which will be called only if the desired event is happened
 */
 
 //****************************************THE OBSERVER PART********************************* */
