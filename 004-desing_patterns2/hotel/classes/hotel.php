@@ -52,7 +52,7 @@ class Hotel {
     foreach ($this->listaSoba as $room) {
       if ($room->getDaLiJeIzdato() == false && $room->getBrojKreveta() == $brojKreveta) {
         echo 'Pronasli smo slobodnu sobu! Broj sobe je: ' . $room->getName() . '<br>';
-        return $room->getName();
+        return $room;
         break;
       } 
     }
@@ -61,12 +61,14 @@ class Hotel {
   }
 
   public function iznajmiSobu($brojKreveta){
-    $brojSlobodneSobe = $this->pronadjiSlobodnuSobu($brojKreveta);
+    $slobodnaSoba = $this->pronadjiSlobodnuSobu($brojKreveta);
     //ako nema slobodne sobe sa datim brojem kreveta
-    if (!$brojSlobodneSobe) {
+    if (!$slobodnaSoba) {
       echo 'Postovani klijentu, nemamo slobodnu sobu sa ' . $brojKreveta . 'brojem kreveta, trenutno.<br>';
     }
     //ako ima slobodne sobe sa datim brojem kreveta
+    $slobodnaSoba->setdaLiJeIzdato(true);//namestamo sobu da je izdata
+    echo 'Dragi klijentu, soba broj ' . $slobodnaSoba->getName() . ' je iznajmljena za vas. <br>';
 
   }
 

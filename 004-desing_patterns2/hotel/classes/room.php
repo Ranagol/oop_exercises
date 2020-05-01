@@ -29,6 +29,6 @@ class Room {
   }
 
   public function setDaLiJeIzdato($trueOrFalse){
-    $this->izdato = $trueOrFalse;
+    $this->daLiJeIzdato = $trueOrFalse;
   }
 }
