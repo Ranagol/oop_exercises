@@ -1,9 +1,55 @@
 <?php
 
 //https://github.com/kamranahmedse/design-patterns-for-humans#-observer
+//https://refactoring.guru/design-patterns/observer
 
+/* OBSERVER PATTERN IN MY WORDS
+1. We need two interfaces: Observer and Observable
+2. There will be an Observer class (here: JobSeeker, that are observing the new job ads) and an Observable class (here: EmploymentAgency, that is creating new job ads)
+3. All the observer object has to be collected in the Observable/EmploymentAgency class, in an array
+4. Use foreach on this array, and for every object trigger their REACTION, via polymorphism
+*/
+
+//****************************************THE OBSERVER PART********************************* */
 interface Observer {
-  public function onJobPosted($jobPost);
+  public function onJobPosted($jobPost);//whoever want to follow the new job ads, must have an Observer interface implemented
+}
+
+class JobSeeker implements Observer {//First of all we have job seekers that need to be notified for a job posting. When they are notified, they will react to the job ad.
+  protected $name;
+
+  public function __construct($name){
+    $this->name = $name;
+  }
+
+  public function onJobPosted($jobPost){//this will be the REACTION if a new job post will happen in the employment agency
+    echo $this->name . ' will apply for this new job add: ' . $jobPost->getTitle() . '<br>';
+  }
+}
+
+
+//***************************************** THE OBSERVABLE PART************************************************* */
+interface Observable {
+  public function addNewJobPost($jobPost);
+}
+
+class EmploymentAgency implements Observable {
+  protected $observers = [];//
+
+  protected function notify($jobPost){//this function notifies every observer, with a foreach
+    foreach ($this->observers as $observer) {
+      $observer->onJobPosted($jobPost);//polymorphism. onJobPosted() is the jobSeekers function.
+    }
+  }
+
+  public function attach($observer){//this is just for adding observers into the array
+    $this->observers[] = $observer;
+  }
+
+  public function addNewJobPost($title){//This is the TRIGGER. When a new job post is added/created...
+    $jobPost = new JobPost($title);
+    $this->notify($jobPost);//all observers will be notified
+  }
 }
 
 class JobPost {
@@ -15,41 +61,6 @@ class JobPost {
 
   public function getTitle(){
     return $this->title;
-  }
-}
-
-class JobSeeker implements Observer {//First of all we have job seekers that need to be notified for a job posting
-  protected $name;
-
-  public function __construct($name){
-    $this->name = $name;
-  }
-
-  public function onJobPosted($jobPost){
-    echo $this->name . ' will apply for this new job add: ' . $jobPost . '<br>';
-  }
-}
-//---------------------------------------------
-
-interface Observable {
-  public function addNewJobPost($jobPost);
-}
-
-class EmploymentAgency implements Observable {
-  protected $observers = [];
-
-  protected function notify($jobPost){
-    foreach ($this->observers as $observer) {
-      $observer->onJobPosted($jobPost);
-    }
-  }
-
-  public function attach($observer){
-    $this->observers[] = $observer;
-  }
-
-  public function addNewJobPost($jobPost){
-    $this->notify($jobPost);
   }
 }
 
