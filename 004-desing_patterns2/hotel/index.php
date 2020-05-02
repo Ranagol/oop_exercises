@@ -28,4 +28,8 @@ $hotel->odjaviSobu(6);//ovde smo odjavili gosta iz sobe 6
 $hotel->iznajmiSobu(2);
 $hotel->iznajmiSobu(2);
 $hotel->odjaviSobu(5);
+/*
+Ja, John Doe bih voleo da rezervisem jednu sobu sa 2 kreveta.
+Ja, Jane Doe bih voleo da rezervisem jednu sobu sa 2 kreveta.
+*/
 var_dump($hotel);
